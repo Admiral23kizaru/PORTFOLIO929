@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aaron — Web & Mobile App Developer</title>
+  <meta name="theme-color" content="#0ea5e9">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS for scroll animations -->
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-1: #0b1220;
+      --bg-2: #0a1a2b;
+      --txt: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #0ea5e9;  /* cyan */
+      --accent-2: #8b5cf6; /* violet */
+      --accent-3: #22d3ee; /* teal */
+      --card: #0f172a;
+      --card-2: #0b1326;
+      --glass: rgba(255,255,255,0.08);
+      --glass-bd: rgba(255,255,255,0.12);
+      --shadow-1: 0 10px 30px rgba(2, 6, 23, 0.5), 0 2px 8px rgba(0,0,0,0.3);
+    }
+    [data-theme="light"] {
+      --bg-1: #f8fafc;
+      --bg-2: #eef2ff;
+      --txt: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;
+      --accent-2: #8b5cf6;
+      --accent-3: #22c55e;
+      --card: #ffffff;
+      --card-2: #ffffff;
+      --glass: rgba(255,255,255,0.6);
+      --glass-bd: rgba(0,0,0,0.08);
+      --shadow-1: 0 10px 30px rgba(2, 6, 23, 0.08), 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+      color: var(--txt);
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(14,165,233,0.18), transparent 60%),
+                  radial-gradient(1200px 600px at 90% 110%, rgba(139,92,246,0.18), transparent 60%),
+                  linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    /* Animated gradient mesh backdrop */
+    .backdrop {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: conic-gradient(from 180deg at 50% 50%, var(--bg-1), var(--bg-2), var(--bg-1));
+      filter: saturate(120%) blur(60px) contrast(105%);
+      animation: swirl 30s linear infinite;
+      opacity: .45;
+    }
+    @keyframes swirl { 0%{transform: rotate(0deg) scale(1);} 50%{transform: rotate(180deg) scale(1.03);} 100%{transform: rotate(360deg) scale(1);} }
+
+    /* Floating blobs */
+    .blob {
+      position: absolute; width: 520px; height: 520px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--accent), transparent 55%),
+                  radial-gradient(circle at 60% 60%, var(--accent-2), transparent 65%);
+      filter: blur(40px) saturate(120%);
+      opacity: .28; z-index: 0; pointer-events: none;
+      animation: float 16s ease-in-out infinite;
+    }
+    .blob.b2 { left: auto; right: -180px; top: 20%; animation-delay: -4s; }
+    .blob.b3 { left: 20%; top: 70%; animation-delay: -8s; }
+    @keyframes float { 0%,100%{ transform: translateY(0) translateX(0) scale(1);} 50%{ transform: translateY(-24px) translateX(6px) scale(1.05);} }
+
+    /* Navbar */
+    .navbar { transition: background-color .3s ease, box-shadow .3s ease, transform .3s ease; }
+    .navbar-glass { background: var(--glass) !important; backdrop-filter: blur(10px) saturate(130%); border-bottom: 1px solid var(--glass-bd); }
+    .navbar-scrolled { box-shadow: var(--shadow-1); }
+    .navbar .navbar-brand { font-weight: 800; letter-spacing: .3px; background: linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .navbar .nav-link { color: var(--txt); opacity: .86; position: relative; font-weight: 500; }
+    .navbar .nav-link:hover { opacity: 1; }
+    .navbar .nav-link::after { content: ""; position: absolute; left: 10%; bottom: -6px; height: 2px; width: 0; border-radius: 2px; background: linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3)); transition: width .25s ease; }
+    .navbar .nav-link:hover::after, .navbar .nav-link.active::after { width: 80%; }
+
+    /* Hero */
+    header.hero { position: relative; min-height: 100vh; display: grid; place-items: center; padding-top: 64px; }
+    .hero-card { position: relative; z-index: 1; padding: clamp(2rem, 3vw + 1rem, 4rem); border-radius: 28px; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border: 1px solid var(--glass-bd); box-shadow: var(--shadow-1); }
+    .hero-title { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(2rem, 4.2vw + 1rem, 4rem); margin-bottom: .6rem; background: linear-gradient(90deg, var(--txt), rgba(255,255,255,.8)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-sub { color: var(--muted); font-size: clamp(1rem, .5vw + .9rem, 1.25rem); }
+
+    .btn-glow { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.15); }
+    .btn-glow::before { content: ""; position: absolute; inset: -2px; background: radial-gradient(600px 200px at var(--mx,50%) 0%, rgba(255,255,255,.2), transparent 60%); transition: opacity .2s; opacity: .6; }
+    .btn-glow:hover::before { opacity: 1; }
+
+    /* Sections */
+    section { position: relative; padding: 80px 0; }
+    .section-title { font-weight: 800; letter-spacing: -.01em; margin-bottom: 1.25rem; }
+    .section-sub { color: var(--bs-secondary-color); margin-bottom: 2rem; }
+
+    /* Surfaces */
+    .surface { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border: 1px solid var(--glass-bd); border-radius: 20px; box-shadow: var(--shadow-1); }
+    .surface:hover { transform: translateY(-2px); }
+    .card-animated { transition: transform .25s ease, box-shadow .25s ease; transform-style: preserve-3d; }
+
+    /* Project cards */
+    .project-card { height: 100%; }
+    .project-card .card-title { font-weight: 700; }
+
+    /* GitHub blocks */
+    .gh-surface img { border-radius: 12px; border: 1px solid var(--glass-bd); background: var(--card); }
+
+    /* Footer */
+    footer { color: var(--muted); }
+
+    /* Scroll progress */
+    #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 9999; background: linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3)); box-shadow: 0 2px 6px rgba(14,165,233,.35); pointer-events: none; }
+  /* Shields.io badges */
+    .shields .shield { height: 30px; border-radius: 6px; transition: transform .2s ease, filter .2s ease; }
+    @media (min-width: 768px) { .shields .shield { height: 34px; } }
+    .shields .shield:hover { transform: translateY(-2px) scale(1.03); filter: drop-shadow(0 6px 12px rgba(14,165,233,.25)); }
+  /* Improve contrast for muted text on dark surfaces */
+    :root { --bs-secondary-color: #a8b3cf; }
+    .surface .text-muted, .surface p.text-muted { color: var(--bs-secondary-color) !important; opacity: 1 !important; }
+
+    /* Icon bubble for About section services */
+    .icon-bubble { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 20px rgba(14,165,233,.25); flex: none; }
+  </style>
+</head>
+<body>
+  <div class="backdrop"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-glass fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#home">Aaron</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#github-stats">GitHub</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="btn btn-outline-info btn-sm btn-glow" href="https://github.com/Admiral23kizaru" target="_blank" rel="noreferrer">GitHub</a></li>
+          <li class="nav-item"><button id="themeToggle" class="btn btn-sm btn-outline-light ms-lg-2" type="button" aria-label="Toggle theme">Theme</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="home">
+    <div class="container position-relative">
+      <div class="blob" style="left: -180px; top: -120px;"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+
+      <div class="row align-items-center justify-content-center" data-aos="fade-up">
+        <div class="col-12 col-lg-10">
+          <div class="hero-card card-animated text-center">
+            <h1 class="hero-title">Hi, I’m Aaron</h1>
+            <p class="hero-sub mb-4">Web & Mobile App Developer — building modern, scalable products with clean UX and strong engineering foundations.</p>
+
+            <div class="typing-wrap mb-3">
+              <a href="https://git.io/typing-svg" target="_blank" rel="noreferrer">
+                <img src="https://readme-typing-svg.herokuapp.com?color=00F700&lines=Web+Developer;Mobile+App+Developer;Open-Source+Contributor;Machine+Learning+Enthusiast;Always+Learning+New+Tech" alt="Typing" />
+              </a>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+              <a class="btn btn-info btn-lg text-dark btn-glow" href="#projects">See my work</a>
+              <a class="btn btn-outline-light btn-lg btn-glow" href="#contact">Contact me</a>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+              <a href="mailto:YOUR_EMAIL@example.com" class="btn btn-sm btn-outline-light btn-glow">Email</a>
+              <a href="https://linkedin.com/in/YOUR_LINKEDIN" class="btn btn-sm btn-outline-light btn-glow" target="_blank">LinkedIn</a>
+              <a href="https://twitter.com/YOUR_TWITTER" class="btn btn-sm btn-outline-light btn-glow" target="_blank">Twitter</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-6" data-aos="fade-right">
+          <h2 class="section-title">About Me</h2>
+          <p class="section-sub">Passionate about modern, responsive, and user-friendly applications. Specialized in mobile dev (React Native, Kotlin) and full‑stack web. Exploring DevOps & Cloud, and continuously learning ML/AI.</p>
+          <div class="surface p-4">
+            <ul class="mb-0">
+              <li>Mobile & Web development</li>
+              <li>DevOps & Cloud</li>
+              <li>Machine Learning & AI</li>
+              <li>Open‑source contributor</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left">
+          <div class="surface p-4 h-100">
+            <h5 class="fw-semibold mb-3">What I Do</h5>
+            <div class="d-grid gap-3">
+              <div class="d-flex gap-3 align-items-start">
+                <span class="icon-bubble">⚡</span>
+                <div>
+                  <h6 class="mb-1">Web Applications</h6>
+                  <p class="text-muted mb-0">Modern SPAs and SSR apps with React, performance‑focused and accessible.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3 align-items-start">
+                <span class="icon-bubble">📱</span>
+                <div>
+                  <h6 class="mb-1">Mobile Apps</h6>
+                  <p class="text-muted mb-0">Cross‑platform apps with React Native and native Android (Kotlin/Java).</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3 align-items-start">
+                <span class="icon-bubble">☁️</span>
+                <div>
+                  <h6 class="mb-1">DevOps & Cloud</h6>
+                  <p class="text-muted mb-0">CI/CD, Docker, and AWS deployments for reliable, scalable delivery.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-12" data-aos="fade-up">
+          <h2 class="section-title">Languages, Frameworks & Tools</h2>
+          <p class="section-sub">A pragmatic stack for shipping quality software.</p>
+          <div class="surface p-3 p-md-4">
+            <!-- Frontend -->
+            <h5 class="fw-semibold mb-2">🌐 Frontend</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+              <img class="shield" alt="CSS3" src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+              <img class="shield" alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+              <img class="shield" alt="Bootstrap" src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
+              <img class="shield" alt="TailwindCSS" src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white">
+              <img class="shield" alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
+              <img class="shield" alt="React Native" src="https://img.shields.io/badge/React%20Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
+            </div>
+
+            <!-- Backend -->
+            <h5 class="fw-semibold mb-2 mt-3">⚙️ Backend</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
+              <img class="shield" alt="Express.js" src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white">
+              <img class="shield" alt="PHP" src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white">
+              <img class="shield" alt="Laravel" src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white">
+              <img class="shield" alt="MySQL" src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+              <img class="shield" alt="MongoDB" src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
+              <img class="shield" alt="REST API" src="https://img.shields.io/badge/REST%20API-FF6C37?style=for-the-badge&logo=api&logoColor=white">
+            </div>
+
+            <!-- Machine Learning & AI -->
+            <h5 class="fw-semibold mb-2 mt-3">🤖 Machine Learning & AI</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+              <img class="shield" alt="TensorFlow" src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
+              <img class="shield" alt="Scikit-learn" src="https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white">
+              <img class="shield" alt="Pandas" src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white">
+              <img class="shield" alt="NumPy" src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white">
+            </div>
+
+            <!-- Cloud & Tools -->
+            <h5 class="fw-semibold mb-2 mt-3">☁️ Cloud & Tools</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="AWS" src="https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white">
+              <img class="shield" alt="Git" src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white">
+              <img class="shield" alt="GitHub" src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
+              <img class="shield" alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+              <img class="shield" alt="VS Code" src="https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
+              <img class="shield" alt="Postman" src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
+              <img class="shield" alt="Figma" src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
+            </div>
+
+            <!-- Databases & Caching -->
+            <h5 class="fw-semibold mb-2 mt-3">📦 Databases & Caching</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white">
+              <img class="shield" alt="SQLite" src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
+              <img class="shield" alt="Redis" src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
+            </div>
+
+            <!-- Backend & APIs -->
+            <h5 class="fw-semibold mb-2 mt-3">⚡ Backend & APIs</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Apache" src="https://img.shields.io/badge/Apache-D22128?style=for-the-badge&logo=apache&logoColor=white">
+              <img class="shield" alt="Nginx" src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
+              <img class="shield" alt="GraphQL" src="https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white">
+              <img class="shield" alt="Firebase" src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black">
+            </div>
+
+            <!-- Frontend Tools -->
+            <h5 class="fw-semibold mb-2 mt-3">🎨 Frontend Tools</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Redux" src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
+            </div>
+
+            <!-- Testing -->
+            <h5 class="fw-semibold mb-2 mt-3">🧪 Testing</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Jest" src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white">
+              <img class="shield" alt="Mocha" src="https://img.shields.io/badge/Mocha-8D6748?style=for-the-badge&logo=mocha&logoColor=white">
+            </div>
+
+            <!-- Deployment Platforms -->
+            <h5 class="fw-semibold mb-2 mt-3">☁️ Deployment Platforms</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Heroku" src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white">
+              <img class="shield" alt="Vercel" src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
+              <img class="shield" alt="Netlify" src="https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white">
+            </div>
+
+            <!-- OS & Tools -->
+            <h5 class="fw-semibold mb-2 mt-3">💻 OS & Tools</h5>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Linux" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
+              <img class="shield" alt="Bash" src="https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white">
+              <img class="shield" alt="Notion" src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+              <img class="shield" alt="Jira" src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
+            </div>
+
+            <!-- Frameworks -->
+            <h5 class="fw-semibold mb-2 mt-3">🏗️ Frameworks</h5>
+            <div class="mb-2 small text-uppercase text-muted">🌐 Web Frameworks</div>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Django" src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white">
+              <img class="shield" alt="Flask" src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white">
+              <img class="shield" alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+              <img class="shield" alt="Laravel" src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white">
+            </div>
+            <div class="mb-2 small text-uppercase text-muted">⚛️ Frontend Frameworks</div>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
+              <img class="shield" alt="Next.js" src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
+              <img class="shield" alt="Angular" src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white">
+              <img class="shield" alt="Vue.js" src="https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D">
+              <img class="shield" alt="Svelte" src="https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&logo=svelte&logoColor=white">
+            </div>
+
+            <!-- Game Development -->
+            <h5 class="fw-semibold mb-2 mt-3">🎮 Game Development</h5>
+            <div class="mb-2 small text-uppercase text-muted">💻 Languages</div>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="C#" src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white">
+              <img class="shield" alt="C++" src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white">
+              <img class="shield" alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+              <img class="shield" alt="Java" src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white">
+              <img class="shield" alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+            </div>
+            <div class="mb-2 small text-uppercase text-muted">🕹️ Engines & Frameworks</div>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center mb-3">
+              <img class="shield" alt="Unity" src="https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white">
+              <img class="shield" alt="Unreal Engine" src="https://img.shields.io/badge/Unreal_Engine-0E1128?style=for-the-badge&logo=unrealengine&logoColor=white">
+              <img class="shield" alt="Godot" src="https://img.shields.io/badge/Godot-478CBF?style=for-the-badge&logo=godotengine&logoColor=white">
+              <img class="shield" alt="Phaser" src="https://img.shields.io/badge/Phaser-FF6F61?style=for-the-badge&logo=phaser&logoColor=white">
+              <img class="shield" alt="Pygame" src="https://img.shields.io/badge/Pygame-3776AB?style=for-the-badge&logo=python&logoColor=white">
+            </div>
+            <div class="mb-2 small text-uppercase text-muted">🎨 Game Art & Tools</div>
+            <div class="shields d-flex flex-wrap gap-2 align-items-center">
+              <img class="shield" alt="Blender" src="https://img.shields.io/badge/Blender-F5792A?style=for-the-badge&logo=blender&logoColor=white">
+              <img class="shield" alt="Maya" src="https://img.shields.io/badge/Maya-00B3F0?style=for-the-badge&logo=autodesk&logoColor=white">
+              <img class="shield" alt="3ds Max" src="https://img.shields.io/badge/3ds%20Max-000000?style=for-the-badge&logo=autodesk&logoColor=white">
+              <img class="shield" alt="Photoshop" src="https://img.shields.io/badge/Photoshop-31A8FF?style=for-the-badge&logo=adobephotoshop&logoColor=white">
+              <img class="shield" alt="Illustrator" src="https://img.shields.io/badge/Illustrator-FF9A00?style=for-the-badge&logo=adobeillustrator&logoColor=white">
+              <img class="shield" alt="GIMP" src="https://img.shields.io/badge/GIMP-5C5543?style=for-the-badge&logo=gimp&logoColor=white">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-right">
+          <div class="surface p-4 card-animated h-100">
+            <h5 class="fw-semibold">Frontend</h5>
+            <p class="text-muted mb-0">React, React Native, Tailwind, Bootstrap, HTML/CSS, JavaScript</p>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-left">
+          <div class="surface p-4 card-animated h-100">
+            <h5 class="fw-semibold">Backend & Cloud</h5>
+            <p class="text-muted mb-0">Node.js, Express, PHP, Laravel, MySQL, MongoDB, AWS, Docker</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="section-title mb-0">Featured Projects</h2>
+        <a href="https://github.com/Admiral23kizaru?tab=repositories" class="btn btn-outline-info btn-glow" target="_blank">All Repos</a>
+      </div>
+      <p class="section-sub">A selection of my recent public repositories from GitHub.</p>
+
+      <div id="projects-grid" class="row g-4"><!-- Filled by JS --></div>
+    </div>
+  </section>
+
+  <!-- GITHUB STATS -->
+  <section id="github-stats">
+    <div class="container">
+      <h2 class="section-title text-center" data-aos="fade-up">GitHub Overview</h2>
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="surface p-4 gh-surface h-100 text-center">
+            <h5 class="fw-semibold">Contribution Graph</h5>
+            <img src="https://ghchart.rshah.org/Admiral23kizaru" alt="Contribution Graph" class="img-fluid mt-3" />
+          </div>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left">
+          <div class="surface p-4 gh-surface h-100 text-center">
+            <h5 class="fw-semibold">Trophies & Top Languages</h5>
+            <img src="https://github-profile-trophy.vercel.app/?username=Admiral23kizaru&theme=radical&no-frame=true&margin-w=15" alt="Trophies" class="img-fluid mb-3" />
+            <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Admiral23kizaru&layout=compact&theme=radical" alt="Top Languages" class="img-fluid" />
+          </div>
+        </div>
+      </div>
+      <div class="row g-4 mt-1">
+        <div class="col-md-6" data-aos="zoom-in">
+          <div class="surface p-4 gh-surface h-100 text-center">
+            <h6 class="fw-semibold">GitHub Stats</h6>
+            <img src="https://github-readme-stats.vercel.app/api?username=Admiral23kizaru&show_icons=true&theme=radical" alt="GitHub stats" class="img-fluid mt-2" />
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="zoom-in">
+          <div class="surface p-4 gh-surface h-100 text-center">
+            <h6 class="fw-semibold">Contribution Streak</h6>
+            <img src="https://github-readme-streak-stats.herokuapp.com/?user=Admiral23kizaru&theme=radical" alt="Streak" class="img-fluid mt-2" />
+          </div>
+        </div>
+      </div>
+      <div class="row g-4 mt-1">
+        <div class="col-12" data-aos="fade-up">
+          <div class="surface p-4 gh-surface text-center">
+            <h6 class="fw-semibold">Contribution Snake</h6>
+            <picture>
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Admiral23kizaru/Admiral23kizaru/output/github-contribution-grid-snake-dark.svg" />
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Admiral23kizaru/Admiral23kizaru/output/github-contribution-grid-snake.svg" />
+              <img src="https://raw.githubusercontent.com/Admiral23kizaru/Admiral23kizaru/output/github-contribution-grid-snake.svg" alt="Contribution snake" class="img-fluid mt-2" />
+            </picture>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Latest Blog Posts</h2>
+      <div class="surface p-0" data-aos="fade-up">
+        <div class="list-group list-group-flush">
+          <a href="https://dev.to/yourusername/lost-found-tracker" class="list-group-item list-group-item-action bg-transparent text-light" target="_blank">How I Built a Lost & Found Tracker with React Native</a>
+          <a href="https://medium.com/@yourusername/beginner-mistakes" class="list-group-item list-group-item-action bg-transparent text-light" target="_blank">5 Mistakes to Avoid as a Beginner Developer</a>
+          <a href="https://hashnode.com/@yourusername/cicd-guide" class="list-group-item list-group-item-action bg-transparent text-light" target="_blank">CI/CD for Mobile Apps – A Complete Guide</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Contact</h2>
+      <div class="row g-4" data-aos="fade-up">
+        <div class="col-lg-6">
+          <div class="surface p-4 h-100">
+            <h5>Email</h5>
+            <p class="small text-muted mb-0">YOUR_EMAIL@example.com</p>
+            <h5 class="mt-3">Social</h5>
+            <a href="https://github.com/Admiral23kizaru" class="d-block small" target="_blank">GitHub</a>
+            <a href="https://linkedin.com/in/YOUR_LINKEDIN" class="d-block small" target="_blank">LinkedIn</a>
+            <a href="https://twitter.com/YOUR_TWITTER" class="d-block small" target="_blank">Twitter</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="surface p-4">
+            <form id="contact-form">
+              <div class="mb-3">
+                <label class="form-label">Message</label>
+                <textarea class="form-control" rows="5" placeholder="Hi! I'd like to talk about..."></textarea>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-info text-dark btn-glow">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-4 text-center">
+    © <span id="year"></span> Aaron — Built with Bootstrap & JavaScript
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    // AOS
+    AOS.init({ duration: 700, once: true });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Create scroll progress bar
+    const progress = document.createElement('div');
+    progress.id = 'scroll-progress';
+    document.body.appendChild(progress);
+
+    // Navbar scrolled style + progress
+    const nav = document.querySelector('.navbar');
+    const updateScrolled = () => {
+      if (window.scrollY > 10) nav.classList.add('navbar-scrolled'); else nav.classList.remove('navbar-scrolled');
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+      progress.style.width = scrolled + '%';
+    };
+    updateScrolled();
+    window.addEventListener('scroll', () => requestAnimationFrame(updateScrolled), { passive: true });
+
+    // Smooth scroll + collapse mobile
+    document.querySelectorAll('.navbar .nav-link[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const hash = link.getAttribute('href');
+        if (!hash) return;
+        e.preventDefault();
+        const el = document.querySelector(hash);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const menu = document.getElementById('navMenu');
+        if (menu && menu.classList.contains('show')) {
+          try { bootstrap.Collapse.getOrCreateInstance(menu).hide(); } catch (err) {}
+        }
+      });
+    });
+
+    // Active link highlight
+    const navLinks = Array.from(document.querySelectorAll('.navbar .nav-link[href^="#"]'));
+    const linkById = new Map(navLinks.map(a => [a.getAttribute('href').slice(1), a]));
+    const sections = ['home','about','skills','projects','github-stats','contact'].map(id => document.getElementById(id)).filter(Boolean);
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(a => a.classList.remove('active'));
+            const l = linkById.get(entry.target.id);
+            if (l) l.classList.add('active');
+          }
+        });
+      }, { rootMargin: '0px 0px -60% 0px', threshold: 0.2 });
+      sections.forEach(s => io.observe(s));
+    }
+
+    // Tilt effect for surfaces
+    (function enableTilt(){
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+      const MAX = 8, SCALE = 1.02;
+      const apply = (el) => {
+        el.addEventListener('mousemove', (e) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+          const rx = (0.5 - py) * (MAX * 2), ry = (px - 0.5) * (MAX * 2);
+          el.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(${SCALE})`;
+        });
+        el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+        el.addEventListener('mouseenter', () => { el.style.willChange = 'transform'; });
+      };
+      document.querySelectorAll('.card-animated,.surface').forEach(apply);
+    })();
+
+    // Theme toggle
+    (function theme(){
+      const btn = document.getElementById('themeToggle');
+      const key = 'pref-theme';
+      const apply = (mode) => {
+        if (mode === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        else document.documentElement.removeAttribute('data-theme');
+      };
+      apply(localStorage.getItem(key));
+      btn?.addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        localStorage.setItem(key, next === 'light' ? 'light' : '');
+        apply(next);
+      });
+    })();
+
+    // Build GitHub project cards
+    async function loadRepos() {
+      const username = 'Admiral23kizaru';
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+        if (!res.ok) throw new Error('GitHub API error');
+        const repos = await res.json();
+        const featuredNames = ['Platform3','FoundIt','HelpTap','Inventory-Management-System'];
+        const featured = repos.filter(r => featuredNames.some(name => r.name.toLowerCase().includes(name.toLowerCase())));
+        const others = repos.filter(r => !featured.includes(r)).slice(0, 6 - featured.length);
+        const final = featured.concat(others).slice(0,6);
+
+        const grid = document.getElementById('projects-grid');
+        final.forEach(repo => {
+          const col = document.createElement('div');
+          col.className = 'col-md-6 col-lg-4';
+          const desc = repo.description ? repo.description : '';
+          const lang = repo.language ? `<span class="badge text-bg-secondary">${repo.language}</span>` : '';
+          col.innerHTML = `
+            <div class="surface p-3 p-md-4 card-animated project-card">
+              <div class="d-flex flex-column h-100">
+                <h5 class="card-title mb-1">${repo.name}</h5>
+                <p class="text-muted flex-grow-1 mb-3">${desc}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>${lang}</div>
+                  <div class="d-flex gap-2">
+                    <a href="${repo.html_url}" target="_blank" class="btn btn-sm btn-outline-info btn-glow">Repo</a>
+                    ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="btn btn-sm btn-info text-dark btn-glow">Live</a>` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          grid.appendChild(col);
+        });
+      } catch (err) { console.error(err); }
+    }
+    loadRepos();
+  </script>
+</body>
+</html>
