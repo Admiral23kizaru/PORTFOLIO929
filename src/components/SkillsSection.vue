@@ -2,8 +2,8 @@
   <section id="skills" class="section-padding">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
       <div class="text-center fade-in" style="margin-bottom: 48px;">
-        <h2 class="section-title">Languages, Frameworks & <span class="text-gradient">Tools</span></h2>
-        <p class="section-subtitle" style="margin: 0 auto;">A comprehensive and pragmatic stack for all development needs.</p>
+        <h2 class="section-title">My Tech <span class="text-gradient">Stack</span></h2>
+        <p class="section-subtitle" style="margin: 0 auto;">A comprehensive overview of the technologies I use to build robust applications.</p>
       </div>
 
       <!-- Skills Carousel -->
