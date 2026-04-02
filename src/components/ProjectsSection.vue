@@ -4,7 +4,7 @@
       <div class="projects-header fade-in">
         <div>
           <h2 class="section-title">Featured <span class="text-gradient">Projects</span></h2>
-          <p class="section-subtitle">Latest from my GitHub — you can add screenshots manually.</p>
+          <p class="section-subtitle">Latest from my GitHub</p>
         </div>
         <a href="https://github.com/Admiral23kizaru?tab=repositories" target="_blank" class="btn-outline-glass all-repos-btn">
           <i class="bi bi-github"></i> All Repos
@@ -17,14 +17,7 @@
 
       <div v-else class="projects-grid">
         <div v-for="(repo, i) in displayedRepos" :key="repo.id" class="project-card surface fade-in" @click="openModal(repo)" :style="{ transitionDelay: (i * 0.08) + 's' }">
-          <!-- Image placeholder you can replace -->
-          <div class="card-image">
-            <img v-if="repo.imageUrl" :src="repo.imageUrl" :alt="repo.name" />
-            <div v-else class="card-image-placeholder">
-              <i class="bi bi-image" style="font-size: 2rem; color: var(--text-muted);"></i>
-              <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Add screenshot</span>
-            </div>
-          </div>
+
           <div class="card-body">
             <div class="card-meta">
               <span class="language-dot" :style="{ background: getLanguageColor(repo.language) }"></span>
@@ -189,24 +182,6 @@ onMounted(async () => {
   box-shadow: 0 12px 40px rgba(79, 158, 255, 0.15);
 }
 
-.card-image {
-  height: 180px;
-  background: linear-gradient(135deg, rgba(79,158,255,0.06), rgba(139,92,246,0.04));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.card-image-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 .card-body {
   padding: 20px;
